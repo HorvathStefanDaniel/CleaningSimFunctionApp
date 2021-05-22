@@ -53,6 +53,9 @@ namespace CleaningSimFunctionApp
 
             string s_level_name = req.Query["level_name"];
 
+            int u_id;
+            int timeSeconds;
+            int mistakes_count;
 
 
             ////////SQL CONNECTION
@@ -81,11 +84,11 @@ namespace CleaningSimFunctionApp
             else //must convert to int
             {
 
-                int u_id = TryParseString(s_u_id);
+                u_id = TryParseString(s_u_id);
 
-                int timeSeconds = TryParseString(s_timeSeconds);
+                timeSeconds = TryParseString(s_timeSeconds);
 
-                int mistakes_count = TryParseString(s_mistakes_count);
+                mistakes_count = TryParseString(s_mistakes_count);
 
             }
 
@@ -95,11 +98,12 @@ namespace CleaningSimFunctionApp
 
                 com.Connection = con;
 
-                com.CommandText = "SELECT TOP(1)[user_id] FROM[dbo].[User_Table] WHERE[user_id]";
+                com.CommandText = "INSERT INTO [dbo].[Report]([user_id],[time_seconds],[mistakes_count],[level_name]) " +
+                    "VALUES("+u_id+", "+timeSeconds+", "+mistakes_count+", '"+s_level_name+"')";
 
                 dr = com.ExecuteReader();
                 con.Close();
-                return new OkObjectResult("Id has been inserted");
+                return new OkObjectResult("Report has been inserted");
             }
             catch (Exception e)
             {
